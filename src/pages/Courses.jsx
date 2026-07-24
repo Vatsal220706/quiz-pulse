@@ -1,16 +1,16 @@
 import React from 'react';
-import './Pages.css';
+import { useAuth } from '../context/AuthContext';
+import TeacherCourses from '../components/courses/TeacherCourses';
+import StudentCourses from '../components/courses/StudentCourses';
 
 const Courses = () => {
-  return (
-    <div className="page-container">
-      <div className="placeholder-card">
-        <span className="page-icon">📚</span>
-        <h1 className="page-title">Courses</h1>
-        <p className="page-description">Browse and enroll in courses</p>
-        <div className="coming-soon-badge">Coming Soon</div>
-      </div>
-    </div>
-  );
+  const { user } = useAuth();
+
+  if (user?.role === 'teacher') {
+    return <TeacherCourses />;
+  }
+
+  return <StudentCourses />;
 };
+
 export default Courses;
