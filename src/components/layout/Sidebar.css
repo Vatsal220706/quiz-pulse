@@ -119,6 +119,10 @@
   font-size: 1.2rem;
 }
 
+.avatar-teacher {
+  background: linear-gradient(135deg, var(--accent-purple), #e040fb);
+}
+
 .user-details {
   display: flex;
   flex-direction: column;

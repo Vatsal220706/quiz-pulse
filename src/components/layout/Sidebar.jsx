@@ -3,17 +3,29 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import './Sidebar.css';
 
+const studentMenuItems = [
+  { path: '/dashboard', label: 'Dashboard', icon: '📊' },
+  { path: '/courses', label: 'Courses', icon: '📚' },
+  { path: '/join-quiz', label: 'Join Quiz', icon: '🎯' },
+  { path: '/competitive', label: 'Competitive Rounds', icon: '⚔️' },
+  { path: '/leaderboard', label: 'Leaderboard', icon: '🏆' },
+  { path: '/reports', label: 'Quiz Reports', icon: '📈' },
+];
+
+const teacherMenuItems = [
+  { path: '/dashboard', label: 'Dashboard', icon: '📊' },
+  { path: '/announcements', label: 'Announcements', icon: '📢' },
+  { path: '/courses', label: 'Courses', icon: '📚' },
+  { path: '/assignments', label: 'Assignments', icon: '📝' },
+  { path: '/quiz-manage', label: 'Quiz', icon: '🧩' },
+  { path: '/performance', label: 'Performance Reports', icon: '📈' },
+  { path: '/doubts', label: 'Doubts Pending', icon: '❓' },
+];
+
 const Sidebar = ({ isOpen, onClose }) => {
   const { user } = useAuth();
 
-  const menuItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: '📊' },
-    { path: '/courses', label: 'Courses', icon: '📚' },
-    { path: '/join-quiz', label: 'Join Quiz', icon: '🎯' },
-    { path: '/competitive', label: 'Competitive Rounds', icon: '⚔️' },
-    { path: '/leaderboard', label: 'Leaderboard', icon: '🏆' },
-    { path: '/reports', label: 'Quiz Reports', icon: '📈' },
-  ];
+  const menuItems = user?.role === 'teacher' ? teacherMenuItems : studentMenuItems;
 
   return (
     <>
@@ -43,7 +55,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         {user && (
           <div className="sidebar-footer">
             <div className="user-info">
-              <div className="avatar">
+              <div className={`avatar ${user.role === 'teacher' ? 'avatar-teacher' : ''}`}>
                 {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
               </div>
               <div className="user-details">
