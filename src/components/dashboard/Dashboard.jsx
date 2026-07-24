@@ -45,7 +45,7 @@ const Dashboard = () => {
           <div className="stat-icon-wrapper quiz-icon">📝</div>
           <div className="stat-content">
             <span className="stat-label">Quizzes Attended</span>
-            <span className="stat-value">0</span>
+            <span className="stat-value">{user?.quizzesAttended || 0}</span>
           </div>
         </div>
       </div>
@@ -64,19 +64,23 @@ const Dashboard = () => {
           <div className="quick-stats-list">
             <div className="quick-stat-item">
               <span className="qs-label">Overall Accuracy</span>
-              <span className="qs-value">--%</span>
+              <span className="qs-value">
+                {user?.totalAnswers > 0
+                  ? `${Math.round((user.correctAnswers / user.totalAnswers) * 100)}%`
+                  : '--%'}
+              </span>
             </div>
             <div className="quick-stat-item">
-              <span className="qs-label">Best Score</span>
-              <span className="qs-value">--</span>
+              <span className="qs-label">Correct Answers</span>
+              <span className="qs-value">{user?.correctAnswers || 0} / {user?.totalAnswers || 0}</span>
             </div>
             <div className="quick-stat-item">
               <span className="qs-label">Total Points</span>
-              <span className="qs-value accent">0</span>
+              <span className="qs-value accent">{user?.points || 0} PTS</span>
             </div>
             <div className="quick-stat-item">
-              <span className="qs-label">Avg. Time per Quiz</span>
-              <span className="qs-value">--</span>
+              <span className="qs-label">Quizzes Attended</span>
+              <span className="qs-value">{user?.quizzesAttended || 0}</span>
             </div>
           </div>
         </div>

@@ -22,6 +22,22 @@ const userSchema = new mongoose.Schema({
     enum: ['student', 'teacher'],
     required: true
   },
+  points: {
+    type: Number,
+    default: 0
+  },
+  quizzesAttended: {
+    type: Number,
+    default: 0
+  },
+  correctAnswers: {
+    type: Number,
+    default: 0
+  },
+  totalAnswers: {
+    type: Number,
+    default: 0
+  },
   createdAt: {
     type: Date,
     default: Date.now

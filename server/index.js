@@ -4,6 +4,7 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
 const courseRoutes = require('./routes/courses');
+const quizRoomRoutes = require('./routes/quizRooms');
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
+app.use('/api/quiz-rooms', quizRoomRoutes);
 
 // Connect DB & Start Server
 const PORT = process.env.PORT || 5000;

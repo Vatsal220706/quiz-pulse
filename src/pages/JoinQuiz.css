@@ -1,0 +1,359 @@
+/* ========================================
+   Join Quiz — Styles
+   ======================================== */
+
+.join-quiz-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 120px);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Join Card */
+.jq-join-card {
+  width: 100%;
+  max-width: 480px;
+  padding: 2.5rem;
+  border-radius: var(--radius-xl);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.jq-icon {
+  font-size: 3.5rem;
+}
+
+.jq-title {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.jq-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.jq-alert {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.jq-alert.error {
+  background: rgba(239, 83, 80, 0.15);
+  border: 1px solid rgba(239, 83, 80, 0.3);
+  color: #ef5350;
+}
+
+.jq-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.jq-input-group {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.jq-input-icon {
+  position: absolute;
+  left: 1.25rem;
+  font-size: 1.2rem;
+  color: var(--accent-cyan);
+}
+
+.jq-input-group input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3.2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  color: var(--accent-cyan);
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.jq-input-group input:focus {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+}
+
+.jq-join-btn {
+  width: 100%;
+  padding: 1rem;
+  background: var(--gradient-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-weight: 700;
+  font-size: 1.05rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-glow-cyan);
+  transition: transform var(--transition-fast);
+}
+
+.jq-join-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Room View */
+.jq-room-view {
+  width: 100%;
+  padding: 2rem;
+  border-radius: var(--radius-xl);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.jq-room-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.jq-code-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  letter-spacing: 0.5px;
+}
+
+.jq-room-title {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin: 0.25rem 0 0 0;
+}
+
+.jq-leave-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-glass);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Active Question Card */
+.jq-active-question-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.jq-q-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.jq-q-num {
+  font-weight: 700;
+  color: var(--accent-cyan);
+  font-size: 0.95rem;
+}
+
+.jq-timer-box {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+}
+
+.jq-timer-box.warn {
+  color: #ef5350;
+  animation: pulse 0.5s infinite alternate;
+}
+
+.jq-timer-bar-track {
+  width: 100%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.jq-timer-bar-fill {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: 5px;
+  transition: width 1s linear;
+}
+
+.jq-timer-bar-fill.warn {
+  background: linear-gradient(90deg, #ef5350, #ff7043);
+}
+
+.jq-question-text {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  color: var(--text-primary);
+  margin: 0.5rem 0;
+}
+
+.jq-info-toast {
+  background: rgba(0, 212, 255, 0.15);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.jq-options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+.jq-option-card {
+  padding: 1.25rem;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-glass);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+}
+
+.jq-option-card:hover:not(:disabled) {
+  background: rgba(0, 212, 255, 0.1);
+  border-color: var(--accent-cyan);
+  transform: translateY(-2px);
+}
+
+.jq-option-card.selected {
+  background: rgba(0, 212, 255, 0.18);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.25);
+}
+
+.jq-option-card.correct {
+  background: rgba(76, 175, 80, 0.2);
+  border-color: #4caf50;
+}
+
+.jq-option-card:disabled {
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+.jq-opt-badge {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.jq-opt-text {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.jq-selected-icon {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+.jq-correct-icon {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #4caf50;
+}
+
+.jq-result-banner {
+  margin-top: 1rem;
+}
+
+.jq-result {
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  text-align: center;
+  font-size: 1.05rem;
+}
+
+.jq-result.success {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+  border: 1px solid rgba(76, 175, 80, 0.4);
+}
+
+.jq-result.fail {
+  background: rgba(239, 83, 80, 0.2);
+  color: #ef5350;
+  border: 1px solid rgba(239, 83, 80, 0.4);
+}
+
+/* Waiting Lobby */
+.jq-waiting-card {
+  text-align: center;
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.jq-pulsing-badge {
+  background: rgba(0, 212, 255, 0.15);
+  color: var(--accent-cyan);
+  border: 1px solid var(--accent-cyan);
+  padding: 0.35rem 0.85rem;
+  border-radius: 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  animation: pulse 1.5s infinite alternate;
+}
+
+.jq-waiting-icon {
+  font-size: 3.5rem;
+}
+
+.jq-waiting-card h3 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.jq-waiting-card p {
+  color: var(--text-secondary);
+  max-width: 400px;
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .jq-options-grid {
+    grid-template-columns: 1fr;
+  }
+}
