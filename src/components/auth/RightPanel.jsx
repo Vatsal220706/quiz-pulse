@@ -45,7 +45,7 @@ export default function RightPanel() {
         </div>
 
         {/* Auth Form */}
-        <AuthForm role={role} mode={mode} />
+        <AuthForm role={role} mode={mode} onSignUpSuccess={() => setMode('signin')} />
       </div>
     </div>
   );

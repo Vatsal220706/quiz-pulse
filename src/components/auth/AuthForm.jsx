@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import api from '../../services/api';
 
-export default function AuthForm({ role, mode }) {
-  const { login, register } = useAuth();
+export default function AuthForm({ role, mode, onSignUpSuccess }) {
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -76,20 +77,29 @@ export default function AuthForm({ role, mode }) {
           payload.teacherCode = formData.teacherCode;
         }
 
-        await register(payload);
+        await api.post('/auth/register', payload);
+
+        setSuccess('Account created successfully! Please sign in with your credentials.');
+        setFormData((prev) => ({ ...prev, password: '', confirmPassword: '', teacherCode: '' }));
+
+        if (onSignUpSuccess) {
+          setTimeout(() => {
+            onSignUpSuccess();
+          }, 1500);
+        }
       } else {
         await login({
           email: formData.email.trim(),
           password: formData.password,
         });
+
+        setSuccess('Signed in successfully!');
+
+        // Navigate to dashboard
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 300);
       }
-
-      setSuccess(isSignUp ? 'Account created!' : 'Signed in!');
-
-      // Navigate to dashboard
-      setTimeout(() => {
-        navigate('/dashboard');
-      }, 300);
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.');
     } finally {
