@@ -1,8 +1,11 @@
 import { useState } from 'react';
-
-const TEACHER_CODE = 'QPULSE-TEACH-2026';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 export default function AuthForm({ role, mode }) {
+  const { login, register } = useAuth();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -14,6 +17,7 @@ export default function AuthForm({ role, mode }) {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const isSignUp = mode === 'signup';
   const isTeacher = role === 'teacher';
@@ -24,7 +28,7 @@ export default function AuthForm({ role, mode }) {
     setSuccess('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
@@ -55,40 +59,42 @@ export default function AuthForm({ role, mode }) {
         setError('Passwords do not match.');
         return;
       }
+    }
 
-      if (isTeacher && formData.teacherCode !== TEACHER_CODE) {
-        setError('Invalid teacher access code. Please contact your administrator.');
-        return;
+    setIsLoading(true);
+
+    try {
+      if (isSignUp) {
+        const payload = {
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          password: formData.password,
+          role,
+        };
+
+        if (isTeacher) {
+          payload.teacherCode = formData.teacherCode;
+        }
+
+        await register(payload);
+      } else {
+        await login({
+          email: formData.email.trim(),
+          password: formData.password,
+        });
       }
+
+      setSuccess(isSignUp ? 'Account created!' : 'Signed in!');
+
+      // Navigate to dashboard
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 300);
+    } catch (err) {
+      setError(err.message || 'Something went wrong. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
-
-    // Build payload
-    const payload = {
-      role,
-      mode,
-      email: formData.email.trim(),
-      password: formData.password,
-    };
-
-    if (isSignUp) {
-      payload.name = formData.name.trim();
-    }
-
-    console.log(`[Quiz Pulse] ${mode === 'signin' ? 'Sign In' : 'Sign Up'} submitted:`, payload);
-    setSuccess(
-      mode === 'signin'
-        ? 'Signed in successfully! (Frontend only — backend coming soon)'
-        : 'Account created successfully! (Frontend only — backend coming soon)'
-    );
-
-    // Reset form
-    setFormData({
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      teacherCode: '',
-    });
   };
 
   return (
@@ -108,6 +114,7 @@ export default function AuthForm({ role, mode }) {
               value={formData.name}
               onChange={handleChange}
               autoComplete="name"
+              disabled={isLoading}
             />
           </div>
         </div>
@@ -127,6 +134,7 @@ export default function AuthForm({ role, mode }) {
             value={formData.email}
             onChange={handleChange}
             autoComplete="email"
+            disabled={isLoading}
           />
         </div>
       </div>
@@ -145,6 +153,7 @@ export default function AuthForm({ role, mode }) {
             value={formData.password}
             onChange={handleChange}
             autoComplete={isSignUp ? 'new-password' : 'current-password'}
+            disabled={isLoading}
           />
           <button
             type="button"
@@ -173,6 +182,7 @@ export default function AuthForm({ role, mode }) {
               value={formData.confirmPassword}
               onChange={handleChange}
               autoComplete="new-password"
+              disabled={isLoading}
             />
             <button
               type="button"
@@ -202,6 +212,7 @@ export default function AuthForm({ role, mode }) {
               value={formData.teacherCode}
               onChange={handleChange}
               autoComplete="off"
+              disabled={isLoading}
             />
           </div>
           <span className="teacher-code-hint">
@@ -225,10 +236,12 @@ export default function AuthForm({ role, mode }) {
       )}
 
       {/* Submit */}
-      <button type="submit" className="submit-btn">
-        {isSignUp
-          ? `Create ${isTeacher ? 'Teacher' : 'Student'} Account`
-          : `Sign In as ${isTeacher ? 'Teacher' : 'Student'}`}
+      <button type="submit" className="submit-btn" disabled={isLoading}>
+        {isLoading
+          ? 'Please wait...'
+          : isSignUp
+            ? `Create ${isTeacher ? 'Teacher' : 'Student'} Account`
+            : `Sign In as ${isTeacher ? 'Teacher' : 'Student'}`}
       </button>
     </form>
   );

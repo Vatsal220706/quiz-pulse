@@ -58,6 +58,38 @@
   --transition-slow: 0.5s ease;
 }
 
+/* --- Light Theme Overrides --- */
+[data-theme="light"] {
+  --bg-primary: #f0f4f8;
+  --bg-secondary: #e2e8f0;
+  --bg-card: rgba(255, 255, 255, 0.7);
+  --bg-card-hover: rgba(255, 255, 255, 0.85);
+
+  --accent-cyan: #0099cc;
+  --accent-blue: #3b7dd8;
+  --accent-purple: #6354c7;
+  --accent-cyan-dim: rgba(0, 153, 204, 0.12);
+  --accent-purple-dim: rgba(99, 84, 199, 0.12);
+
+  --text-primary: #1a202c;
+  --text-secondary: #4a5568;
+  --text-muted: #a0aec0;
+
+  --border-glass: rgba(0, 0, 0, 0.08);
+  --border-active: rgba(0, 153, 204, 0.4);
+
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: 1px solid var(--border-glass);
+
+  --gradient-bg: radial-gradient(ellipse at 20% 50%, rgba(0, 153, 204, 0.06) 0%, transparent 50%),
+                 radial-gradient(ellipse at 80% 20%, rgba(99, 84, 199, 0.06) 0%, transparent 50%),
+                 var(--bg-primary);
+
+  --shadow-glow-cyan: 0 0 20px rgba(0, 153, 204, 0.15);
+  --shadow-glow-purple: 0 0 20px rgba(99, 84, 199, 0.15);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
 /* --- Reset --- */
 *,
 *::before,
@@ -80,6 +112,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   line-height: 1.6;
+  transition: background var(--transition-normal), color var(--transition-normal);
 }
 
 #root {
