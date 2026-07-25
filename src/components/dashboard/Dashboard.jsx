@@ -1,13 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import api from '../../services/api';
 import './Dashboard.css';
 
 const Dashboard = () => {
   const { user } = useAuth();
-  
+  const [courseStats, setCourseStats] = useState({
+    coursesEnrolled: 0,
+    lessonsCompleted: 0,
+    learningStreak: 0,
+  });
+
   const currentOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   const today = new Date().toLocaleDateString(undefined, currentOptions);
   const memberSince = user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Today';
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const data = await api.get('/courses/stats');
+        setCourseStats({
+          coursesEnrolled: data.coursesEnrolled || 0,
+          lessonsCompleted: data.lessonsCompleted || 0,
+          learningStreak: data.learningStreak || 0,
+        });
+      } catch (err) {
+        console.error('Failed to load student course stats:', err);
+      }
+    };
+
+    fetchStats();
+  }, []);
 
   return (
     <div className="dashboard-container">
@@ -24,21 +47,21 @@ const Dashboard = () => {
           <div className="stat-icon-wrapper courses-icon">📚</div>
           <div className="stat-content">
             <span className="stat-label">Courses Enrolled</span>
-            <span className="stat-value">0</span>
+            <span className="stat-value">{courseStats.coursesEnrolled}</span>
           </div>
         </div>
         <div className="stat-card">
           <div className="stat-icon-wrapper lessons-icon">✅</div>
           <div className="stat-content">
             <span className="stat-label">Lessons Completed</span>
-            <span className="stat-value">0</span>
+            <span className="stat-value">{courseStats.lessonsCompleted}</span>
           </div>
         </div>
         <div className="stat-card">
           <div className="stat-icon-wrapper streak-icon">🔥</div>
           <div className="stat-content">
             <span className="stat-label">Learning Streak</span>
-            <span className="stat-value">0 <span className="stat-unit">days</span></span>
+            <span className="stat-value">{courseStats.learningStreak} <span className="stat-unit">days</span></span>
           </div>
         </div>
         <div className="stat-card">

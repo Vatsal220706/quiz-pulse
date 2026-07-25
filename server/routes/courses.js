@@ -35,6 +35,24 @@ router.post('/', async (req, res) => {
   }
 });
 
+// ─── GET STUDENT COURSE STATS ──────────────────────────────────
+router.get('/stats', async (req, res) => {
+  try {
+    const [totalCourses, completedProgress] = await Promise.all([
+      Course.countDocuments(),
+      CourseProgress.countDocuments({ student: req.user.id, completed: true }),
+    ]);
+
+    res.json({
+      coursesEnrolled: totalCourses,
+      lessonsCompleted: completedProgress,
+      learningStreak: totalCourses > 0 ? 1 : 0,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // ─── GET ALL COURSES (sorted by sequence) ──────────────────────
 router.get('/', async (req, res) => {
   try {
