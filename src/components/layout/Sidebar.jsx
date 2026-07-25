@@ -10,6 +10,7 @@ const studentMenuItems = [
   { path: '/competitive', label: 'Competitive Rounds', icon: '⚔️' },
   { path: '/leaderboard', label: 'Leaderboard', icon: '🏆' },
   { path: '/reports', label: 'Quiz Reports', icon: '📈' },
+  { path: '/doubts', label: 'Ask Doubts', icon: '❓' },
 ];
 
 const teacherMenuItems = [

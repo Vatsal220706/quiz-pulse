@@ -6,6 +6,7 @@ const authRoutes = require('./routes/auth');
 const courseRoutes = require('./routes/courses');
 const quizRoomRoutes = require('./routes/quizRooms');
 const competitiveRoutes = require('./routes/competitive');
+const doubtRoutes = require('./routes/doubts');
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/quiz-rooms', quizRoomRoutes);
 app.use('/api/competitive', competitiveRoutes);
+app.use('/api/doubts', doubtRoutes);
 
 // Connect DB & Start Server
 const PORT = process.env.PORT || 5000;

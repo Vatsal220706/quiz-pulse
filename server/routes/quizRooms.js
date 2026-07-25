@@ -4,6 +4,7 @@ const QuizRoom = require('../models/QuizRoom');
 const User = require('../models/User');
 const Course = require('../models/Course');
 const CompetitiveRound = require('../models/CompetitiveRound');
+const Doubt = require('../models/Doubt');
 const { protect } = require('../middleware/auth');
 
 router.use(protect);
@@ -275,12 +276,13 @@ router.get('/teacher-dashboard-stats', async (req, res) => {
   try {
     const teacherId = req.user.id;
 
-    // 1. Fetch teacher's quiz rooms and competitive rounds, all platform courses & students
-    const [quizRooms, competitiveRounds, courses, totalStudents] = await Promise.all([
+    // 1. Fetch teacher's quiz rooms, competitive rounds, courses, students, and pending doubts
+    const [quizRooms, competitiveRounds, courses, totalStudents, doubtsPending] = await Promise.all([
       QuizRoom.find({ teacher: teacherId }),
       CompetitiveRound.find({ teacher: teacherId }),
       Course.find({}),
       User.find({ role: 'student' }),
+      Doubt.countDocuments({ status: 'pending' }),
     ]);
 
     const quizzesCreated = quizRooms.length + competitiveRounds.length;
@@ -326,7 +328,7 @@ router.get('/teacher-dashboard-stats', async (req, res) => {
         studentsEnrolled,
         coursesOffered,
         assignmentsGiven: 0,
-        doubtsPending: 0,
+        doubtsPending,
         avgQuizScore,
         highestScore: '98%',
         lowestScore: '65%',
