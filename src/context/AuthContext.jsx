@@ -12,13 +12,13 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const restoreSession = async () => {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (token) {
         try {
           const data = await api.get('/auth/me');
           setUser(data.user || data);
         } catch (err) {
-          localStorage.removeItem('token');
+          sessionStorage.removeItem('token');
         }
       }
       setLoading(false);
@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (formData) => {
     try {
       const data = await api.post('/auth/register', formData);
-      localStorage.setItem('token', data.token);
+      sessionStorage.setItem('token', data.token);
       setUser(data.user);
       return data;
     } catch (err) {
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (formData) => {
     try {
       const data = await api.post('/auth/login', formData);
-      localStorage.setItem('token', data.token);
+      sessionStorage.setItem('token', data.token);
       setUser(data.user);
       return data;
     } catch (err) {
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
     setUser(null);
   };
 

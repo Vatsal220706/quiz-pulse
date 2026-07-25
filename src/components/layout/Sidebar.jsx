@@ -18,6 +18,7 @@ const teacherMenuItems = [
   { path: '/courses', label: 'Courses', icon: '📚' },
   { path: '/assignments', label: 'Assignments', icon: '📝' },
   { path: '/quiz-manage', label: 'Quiz', icon: '🧩' },
+  { path: '/competitive', label: 'Competitive Rounds', icon: '⚔️' },
   { path: '/performance', label: 'Performance Reports', icon: '📈' },
   { path: '/doubts', label: 'Doubts Pending', icon: '❓' },
 ];

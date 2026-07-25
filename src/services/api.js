@@ -1,7 +1,7 @@
 const API_BASE = '/api';
 
 async function request(endpoint, options = {}) {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
   const { headers: customHeaders, ...restOptions } = options;
 
   const config = {
