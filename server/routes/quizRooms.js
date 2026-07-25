@@ -589,23 +589,29 @@ router.get('/my-reports', async (req, res) => {
       ? { teacher: req.user.id }
       : { $or: [{ participants: req.user.id }, { 'responses.student': req.user.id }] };
 
-    const rooms = await QuizRoom.find(query)
-      .sort({ createdAt: -1 })
-      .populate('responses.student', 'name email');
+    const [rooms, compRounds, currentUser] = await Promise.all([
+      QuizRoom.find(query).sort({ createdAt: -1 }).populate('responses.student', 'name email'),
+      CompetitiveRound.find(query).sort({ createdAt: -1 }).populate('responses.student', 'name email'),
+      User.findById(req.user.id),
+    ]);
 
     let globalCorrect = 0;
     let globalIncorrect = 0;
     let globalAttempted = 0;
 
-    const reports = rooms.map((room) => {
+    const allRooms = [
+      ...rooms.map((r) => ({ ...r.toObject(), type: 'Standard Quiz' })),
+      ...compRounds.map((r) => ({ ...r.toObject(), type: 'Competitive Battle' })),
+    ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    const reports = allRooms.map((room) => {
       let roomCorrect = 0;
       let roomIncorrect = 0;
       let roomAttempted = 0;
 
-      const questionAnalysis = room.questions.map((q, qIdx) => {
-        // Find student's response if student, or all responses if teacher
-        const userResp = room.responses.find(
-          (r) => r.student && r.student._id.toString() === req.user.id && r.questionIndex === qIdx
+      const questionAnalysis = (room.questions || []).map((q, qIdx) => {
+        const userResp = (room.responses || []).find(
+          (r) => r.student && (r.student._id?.toString() === req.user.id || r.student?.toString() === req.user.id) && r.questionIndex === qIdx
         );
 
         let status = 'unanswered';
@@ -614,7 +620,7 @@ router.get('/my-reports', async (req, res) => {
 
         if (userResp) {
           selectedOption = userResp.selectedOption;
-          isCorrect = userResp.isCorrect;
+          isCorrect = !!userResp.isCorrect;
           status = isCorrect ? 'correct' : 'incorrect';
           roomAttempted++;
           globalAttempted++;
@@ -642,10 +648,10 @@ router.get('/my-reports', async (req, res) => {
 
       return {
         quizId: room._id,
-        title: room.title,
+        title: `${room.title}${room.type ? ` (${room.type})` : ''}`,
         roomCode: room.roomCode,
         date: room.createdAt,
-        totalQuestions: room.questions.length,
+        totalQuestions: (room.questions || []).length,
         attemptedQuestions: roomAttempted,
         correctCount: roomCorrect,
         incorrectCount: roomIncorrect,
@@ -653,6 +659,17 @@ router.get('/my-reports', async (req, res) => {
         questionAnalysis,
       };
     });
+
+    // Sync with User model totals if student role to ensure 100% consistency with Leaderboard
+    if (currentUser && currentUser.role === 'student') {
+      if ((currentUser.totalAnswers || 0) > globalAttempted) {
+        globalAttempted = currentUser.totalAnswers;
+      }
+      if ((currentUser.correctAnswers || 0) > globalCorrect) {
+        globalCorrect = currentUser.correctAnswers;
+      }
+      globalIncorrect = Math.max(0, globalAttempted - globalCorrect);
+    }
 
     const overallAccuracy = globalAttempted > 0 ? Math.round((globalCorrect / globalAttempted) * 100) : 0;
 
